@@ -71,7 +71,7 @@
          === --> COMPARA OS VALORES E OS TIPOS (IGUALDADE DE IDENTIDADE)
          != -> COMPARA VALOR
          !== -> COMPARA VALOR E TIPO DE DADO
-         <=> -> space chip -1 caso o da DIREITA é maior 0 caso sejam IGUAIS e 1 caso o da ESQUERDA é maior
+         <=> -> space chip, -1 caso o da DIREITA é maior, 0 caso sejam IGUAIS e 1 caso o da ESQUERDA é maior
          ?? -> coalesce
          $a++ ou ++$a -> 
     */       
@@ -151,8 +151,166 @@
 
     // ******************* INCLUDE && REQUIRE *********************
     /* 
+        - boa prática: Colocar os arquivos include dentro de umas pasta "inc"
         
+        Diferença INCLUDE x REQUIRE
+        -> require: Obriga que o arquivo exista e que o arquivo esteja funcionando corretamente. Caso nao esteja funcionando ou nao existe, 
+                    é gerado um erro FATAL, para a execução do sistema.
+        -> require_once(MAIS RECOMENDADO): garantir que chame apenas uma vez o arquivo, esse arquivo já pode ter sido chamado em outro 
+                                           momento no código.                    
+        -> include: tenta funcionar mesmo que o arquivo não exista ou tenha algum problema. Tem mais recursos, por exemplo o 
+                    diretório "includePath". Exemplo.: Caso eu realize o include do arquivo funcoes.php, o método pesquisa na pasta atual,
+                    caso não encontre, ele vai lá na pasta "includePath" verificar se existe. UTILIZAR O INCLUDE APENAS SE EU USO 
+                    ESSA CONFIGURAÇÃO DE DIRETÓRIO.  
+
+
     */       
+    
     echo "<br/> <strong> 6 - INCLUDE && REQUIRE </strong> <br/>"; 
+    
+    require_once "inc/funcoes.php";
+
+    echo somar(10,10) . "<br />";
+
+    require_once "inc/funcoes.php";
+
+    echo subtrair(10,5);
+
+    // ******************* ESTRUTURAS DE CONDIÇÃO *********************
+    /* 
+        - If ternário. 
+        - switch case
+
+    */         
+    
+    echo "<br/> <strong> 7 - ESTRUTURAS DE CONDIÇÃO </strong> <br/>"; 
+
+    $maiorIdade = 18;
+    $minhaIdade = 22;
+
+    echo ($minhaIdade >= $maiorIdade ) ? "Maior de Idade" : "Menor de Idade" . "<br />";
+
+    $diaSemana = date("w");
+
+    switch ($diaSemana) {
+        case 0:
+            echo "<br /> Domingo";
+            break;
+
+        case 1:
+            echo "<br /> Segunda-feira";
+            break;
+
+        default:
+            echo "<br /> Outro dia";
+            break;
+    };
+
+
+    // ******************* FOR $ FOREACH & WHILE *********************
+    /* 
+        - continue 
+        - break
+
+    */         
+    
+    echo "<br/> <strong> 8 - FOR $ FOREACH & WHILE </strong> <br/>";     
+
+    echo "<select>";
+
+    for($i = 2020; $i <= 2030; $i++){
+
+        echo '<option value="'.$i.'">'.$i.'</option>';
+    };
+    echo "</select> <br>";
+
+
+    $meses = array("Janeiro","Fevereiro","Março",
+                   "Abril","Maio","Junho");
+
+    foreach ($meses as $index => $mes) {
+        echo "índice atual: ".$index."<br>";
+        echo "Mes atual:". $mes. "<br>";
+    }
+
+    $condicao = true;
+
+    while ($condicao){
+        $numero = rand(1, 10);
+
+        if ($numero === 10) {
+            echo "<<-- PAROOU <br>";
+            $condicao = false;
+            break;
+        }
+
+        echo $numero . " ";
+    };
+
+
+    // ******************* Arrays *********************
+    /* 
+        end -> traz o ultimo valor do array; 
+        array_push -> adicionar um valor ao array.
+        json_encode
+        json_decode(colocar true para transformar em array)
+        define("nome",valor) -> constante
+    */         
+    
+    echo "<br/> <strong> 9 - ARRAYS </strong> <br/>";     
+    
+    $pessoas = array();
+
+    array_push($pessoas, array(
+        'nome'=>'Luiz',
+        'idade'=>22         
+    ));
+
+    array_push($pessoas, array(
+        'nome'=>'Maria',
+        'idade'=>30         
+    ));    
+
+    print_r($pessoas);
+
+    echo "Primeira pessoa do array:". $pessoas[0]['nome'] . "<br>";
+
+    define("CONSTANTE","MINHA PRIMEIRA CONSTANTE");
+
+    echo CONSTANTE . "<br>";
+
+    define("ARRAY_CONSTANTE", [
+        'IP'=>"200",
+        'SENHA'=>123
+    ]);
+
+    print_r(ARRAY_CONSTANTE);
+
+
+        // ******************* sessões *********************
+    /* 
+        session_start -> para dizer que vou usar sessões na página (toda página que vou usar sessão tem que ter esse comando)
+        session_id('posso passar o id de uma sessão existente') -> id da sessão 
+        session_regenerate_id
+
+
+        Todas as e variaveis de sessões são armazenadas na pasta temp do computador. 
+
+
+    */   
+    
+    echo "<br/> <strong> 10 - SESSÕES </strong> <br/>";    
+
+    session_start();
+
+    $_SESSION['Servidor'] = "algum servidor";
+
+    //unset($_SESSION['Servidor']);  
+
+    echo (isset($_SESSION['Servidor'])) ? $_SESSION['Servidor'] : "Unset";
+
+    echo "<br>" . "Local da sessão: " . session_status();
+
+
 
 ?>
