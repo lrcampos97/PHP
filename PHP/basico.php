@@ -255,6 +255,7 @@
         json_encode
         json_decode(colocar true para transformar em array)
         define("nome",valor) -> constante
+        array_sum() -> para somar todos os valores de um array.
     */         
     
     echo "<br/> <strong> 9 - ARRAYS </strong> <br/>";     
