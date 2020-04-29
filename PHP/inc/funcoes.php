@@ -43,9 +43,7 @@
         return array_sum($valores); // soma todos os valores aumaticamente.
     }
 
-    function funcaoComRetorno(): float{
-        
-
+    function funcaoComRetorno(): float{        
         return 30;
     }
 
@@ -54,6 +52,90 @@
     echo "<br>";
     echo funcaoComRetorno();
     echo "<br>";
+
+    echo "<br> ------ FUNÇÕES RECURSIVAS --------";
+
+    $hierarquia = array(
+        array(
+            'nome_cargo'=>'CEO',
+            'subordinados'=>array(
+                array(
+                    'nome_cargo'=>'Diretor Comercial',
+                    'subordinados'=>array(
+                        array(
+                            'nome_cargo'=>'Gerente de Vendas'
+                        )
+                    ),
+                    'nome_cargo'=>'Diretor de Pesquisas',
+                    'subordinados'=>array(
+                        array(
+                            'nome_cargo'=>'Gerente de Vendas',
+                            'subordinados'=>array(
+                                array(
+                                    'nome_cargo'=>"Funcionario"
+                                )
+                            )
+                        )
+                    )                    
+                )   
+            )
+        ),
+
+        array(
+            'nome_cargo'=>'CTO',
+            'subordinados'=>array(
+                array(
+                    'nome_cargo'=>"Funcionario"
+                )
+            )
+        )
+    );
+
+    function exibe($cargos){
+        $html = '<ul>';  
+    
+
+
+        foreach ($cargos as $cargo) {
+            $html .= '<li>';
+
+            $html .= $cargo['nome_cargo'];
+
+            if(isset($cargo['subordinados']) && count($cargo['subordinados']) > 0 ){
+                $html.= exibe($cargo['subordinados']);
+            }
+
+            $html .= '</li>';
+        };
+        
+        $html .= '</ul>';
+
+        return $html;
+    };
+
+    echo exibe($hierarquia);
+
+    echo '<br>';
+
+
+    echo "<br> ------ FUNÇÕES ANONIMAS --------";
+
+    function testeAnonimo($functionCallBack){
+        // algum processo lento....
+
+        $functionCallBack();
+    };
+
+
+    testeAnonimo(function(){
+        echo "<br> Chamada função anonima";
+    });
+
+    $variavelFuncao = function(){
+        echo "<br> variavel função anonima";
+    };
+
+    $variavelFuncao();
 
 
 
