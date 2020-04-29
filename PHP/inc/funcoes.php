@@ -5,6 +5,11 @@
         func_get_args() -> Utilizar dentro de funções caso queira pegar os parâmetros. (se os parâmetros não existiram na declaração)   
         & -> na função é passagem de parâmetro por referencia; (ou seja, vou poder alterar o valor que está sendo passado dentro da function)        
         int ...$valores -> declaração de tipos escalares.
+        setlocale() -> ajusta configurações do padrão de linguagem.
+        strftime() -> trazer dias e datas por extenso. 
+        DateInterval -> para incluir um periodo no método add.
+        "->": isso é utilizar um método dentro de uma classe.
+    
     */     
  
     echo "<br/> <strong> 1 - FUNÇÕES </strong> <br/>"; 
@@ -136,6 +141,31 @@
     };
 
     $variavelFuncao();
+
+
+    echo "<br> ------ FUNÇÕES DATA E HORA -------- <br>";
+
+
+    echo "Data atual: ".date("d/m/Y H:i:s")."<br>";
+
+    echo "Time: ".time()."<br>";
+
+
+    setlocale(LC_ALL,"pt-BR","pt_BR.utf-8","portuguese");
+
+    echo "Hoje é: ".date("d")." de ".ucwords(strftime('%B %A'))."<br>";
+
+    $data = new DateTime();
+
+    echo "Utilizando datetime: ". $data->format("d/m/Y")."<br>";
+
+    $periodo = new DateInterval("P1D");
+
+    $data->add($periodo);
+
+    echo "Incrementando um dia: ". $data->format("d/m/Y")."<br>";
+
+
 
 
 
