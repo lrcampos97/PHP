@@ -4,6 +4,9 @@
         static -> Não preciso criar o objeto para utilizar o método, posso invocar apenas ele.
 
         "::" -> para acessar métodos estáticos
+
+        "__" -> método mágico 
+        encapsulamento -> Forma de controlar quem pode acessar determinada informação (public,private,protected,static)
     */
         
 
@@ -52,7 +55,7 @@
 
     print_r($gol->exibir());
 
-    echo "<br>";
+    echo "<br> <strong> 2 - MÉTODOS ESTÁTICOS </strong> <br/>";
 
     class Documento {
         private $numero;
@@ -71,11 +74,12 @@
             return $this->numero;
         }
 
-        public static function validaCPF($numero):bool{
-            if(empty($cpf)) {
+        public static function validaCPF($cpf):bool{            
+            
+            if(empty($cpf)) {                
                 return false;
             }
-            
+                        
             $cpf = preg_match('/[0-9]/', $cpf)?$cpf:0;
 
             $cpf = str_pad($cpf, 11, '0', STR_PAD_LEFT);
@@ -126,7 +130,46 @@
 
     var_dump(Documento::validaCPF("03828499066")); // INVOCANDO O MÉTODO ESTÁTICO SEM INSTANCIAR A CLASSE.
 
+    echo "<br> <strong> 3 - MÉTODOS MÁGICOS </strong> <br/>";
 
+
+    class Endereco {
+        private $logradouro;
+        private $numero;
+
+        public function __construct($logradouro, $numero){
+            $this->logradouro = $logradouro;
+            $this->numero = $numero;
+        }
+
+        public function __destruct(){ // vai excutar no final do arquivo
+           // echo "<br> DESTRUIU A CLASSE <strong> ENDEREÇO </strong> <br>";
+        }
+
+    }
+
+    $endereco = new Endereco("Rua caboçu", "31");
+
+    var_dump($endereco);
+
+    echo "<br> <strong> 4 - ENCAPSULAMENTO </strong> <br/>";
+
+    class Animal {
+        public $raca = "Pastor alemão";
+        protected $especie = "Mamífero";
+        private $idade = 25;
+
+        public function exibeDados(){ // vai exibir pq a função da própria classe está chamando.
+            echo $this->raca . "<br>";
+            echo $this->especie . "<br>";
+            echo $this->idade . "<br>";
+        }
+        
+    }
+
+    $objeto = new Animal();
+
+    $objeto->exibeDados();
    
 
 
