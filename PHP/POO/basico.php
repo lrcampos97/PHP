@@ -7,6 +7,7 @@
 
         "__" -> método mágico 
         encapsulamento -> Forma de controlar quem pode acessar determinada informação (public,private,protected,static)
+        get_class(OBJETO) -> descobrir de qual classe determinado método está sendo executado.
     */
         
 
@@ -155,21 +156,70 @@
     echo "<br> <strong> 4 - ENCAPSULAMENTO </strong> <br/>";
 
     class Animal {
-        public $raca = "Pastor alemão";
-        protected $especie = "Mamífero";
-        private $idade = 25;
+        public $raca = "Pastor alemão"; // TODO MUNDO CONSEGUE ACESSAR
+        protected $especie = "Mamífero"; // a própria classe e as herdadas conseguem acessar.
+        private $idade = 25; //Só a própria classe consegue acessar
 
         public function exibeDados(){ // vai exibir pq a função da própria classe está chamando.
             echo $this->raca . "<br>";
             echo $this->especie . "<br>";
             echo $this->idade . "<br>";
         }
+
+        public function getEspecie(){
+            return $this->especie;
+        }
         
     }
 
-    $objeto = new Animal();
+    class Cachorro extends Animal {
 
+
+        public function exibeDados(){ // vai exibir pq a função da própria classe está chamando.
+            echo get_class($this) . "<br>";
+
+            echo $this->raca . "<br>";
+            echo $this->especie . "<br>";            
+        }    
+    }
+
+    $objeto = new Cachorro();
+    
     $objeto->exibeDados();
+
+
+    echo "<br> <strong> 5 - HERANÇA </strong> <br/>";
+
+
+    class Documentos {
+        private $numero; 
+
+        public function getNumero(){
+            return $this->numero;
+        }
+
+        public function setNumero($numero){
+            $this->numero = $numero;
+        }
+    }
+
+    class CPF extends Documentos {
+
+        public function validarCPF(): bool{
+
+            return ($this->getNumero() > 30) ? true : false;
+
+        }
+    }
+
+    $documento = new CPF();
+
+    $documento->setNumero(55);
+
+    var_dump($documento->validarCPF());
+
+
+
    
 
 
