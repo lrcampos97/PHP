@@ -219,6 +219,27 @@
     var_dump($documento->validarCPF());
 
 
+    echo "<br> <strong> 6 - INTERFACE </strong> <br/>";
+
+    interface Veiculo {
+        
+        public function acelerar($velocidade);
+        public function freiar($velocidade);
+        public function trocarMarcha($marcha);
+    };
+
+    class Civic implements Veiculo {
+        
+        public function acelerar($velocidade){
+            echo "O carro acelerou ". $velocidade;      
+        }
+        // public function freiar($velocidade);
+        // public function trocarMarcha($marcha);
+    }
+
+    $carro = new Civic();
+
+
 
    
 
