@@ -8,6 +8,10 @@
         "__" -> método mágico 
         encapsulamento -> Forma de controlar quem pode acessar determinada informação (public,private,protected,static)
         get_class(OBJETO) -> descobrir de qual classe determinado método está sendo executado.
+        polimorfismo -> métodos com mesmo nome em classes diferentes (herdadas) tem comportamento diferente;
+        função autoLoad -> se utilizada no arquivo, ao realizar qualquer NEW ela invoca a classe chamada sem precisar fazer o require
+        spl_autoload_register -> registrar classes para utilizar no arquivo.
+        DIRECTORY_SEPARTOR -> pega a barra de separação dos arquivos de acordo com o sistema operacional
     */
         
 
@@ -155,7 +159,7 @@
 
     echo "<br> <strong> 4 - ENCAPSULAMENTO </strong> <br/>";
 
-    class Animal {
+    class Animais {
         public $raca = "Pastor alemão"; // TODO MUNDO CONSEGUE ACESSAR
         protected $especie = "Mamífero"; // a própria classe e as herdadas conseguem acessar.
         private $idade = 25; //Só a própria classe consegue acessar
@@ -172,7 +176,7 @@
         
     }
 
-    class Cachorro extends Animal {
+    class Cachorro extends Animais {
 
 
         public function exibeDados(){ // vai exibir pq a função da própria classe está chamando.
@@ -221,23 +225,84 @@
 
     echo "<br> <strong> 6 - INTERFACE </strong> <br/>";
 
-    interface Veiculo {
+    interface Veiculos {
         
         public function acelerar($velocidade);
-        public function freiar($velocidade);
-        public function trocarMarcha($marcha);
     };
 
-    class Civic implements Veiculo {
+    class Civic implements Veiculos {
         
         public function acelerar($velocidade){
-            echo "O carro acelerou ". $velocidade;      
+            echo "O carro acelerou ". $velocidade. "<br/>";      
         }
         // public function freiar($velocidade);
         // public function trocarMarcha($marcha);
     }
 
     $carro = new Civic();
+
+    $carro->acelerar(100);
+
+
+    echo "<br> <strong> 7 - CLASSE ABSTRATA </strong> <br/>";
+
+    interface Veiculo {
+        
+        public function acelerar($velocidade);
+    };
+
+    abstract class Automovel implements Veiculo {
+        
+        public function acelerar($velocidade){
+            echo "O carro acelerou ". $velocidade . "<br/>";      
+        }
+    }
+
+    class FordKa extends Automovel {
+        public function empurrar(){
+            echo "Empurrando o FordKa <br/>";
+
+            $this->acelerar(10);
+        }
+    }
+
+    $objeto = new FordKa();
+
+    $objeto->empurrar();
+
+
+    echo "<br> <strong> 8 - POLIMORFISMO </strong> <br/>";
+
+
+    abstract class Animal {
+
+        public function falar(){
+            return "Som";
+        }
+
+        public function mover(){
+            return "Andar";
+        }
+
+    }
+
+    class Gato extends Animal{
+
+        public function falar(){ //POLIMORFISMO AQUI
+            return "Miau";
+        }
+
+        public function mover(){
+            return "Pular e " . parent::mover(); // UTILIZAR O MÉTODO DA CLASS PAI <-----
+        }
+    }
+
+    $cat = new Gato();
+
+    echo $cat->falar() . "<br/>";
+    echo $cat->mover() . "<br/>";
+
+
 
 
 
