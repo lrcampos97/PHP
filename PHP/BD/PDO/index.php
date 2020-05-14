@@ -10,6 +10,7 @@
 
     echo "<strong> 1 - CONEXÃO BD COM PDO </strong> <br/>";
 
+    
     //$conn = new PDO("mysql:dbname=curso;host=localhost","root",""); // MYSQL
     
     $conn = new PDO("sqlsrv:Database=curso;server=.;ConnectionPooling=0","sa","123"); // SQL SERVER
