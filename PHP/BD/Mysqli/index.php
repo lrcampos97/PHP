@@ -18,8 +18,8 @@
 
     $stmt->bind_param("ss",$login ,$pass);
 
-    $login = "user";
-    $pass = "123";
+    $login = "server";
+    $pass = "95888";
 
     //$stmt->execute();  
     echo "Registro já incluso!!!";  
