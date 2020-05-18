@@ -5,11 +5,38 @@
     */   
 
     require_once("config.php");
+    
+    echo "<br/> <strong> 1 - Buscar apenas um usuário </strong> <br/>";  
 
-    $sql = new sql();
+    $usuario = new Usuario();
 
-    $usuarios = $sql->select("SELECT * FROM tb_usuarios");
+    $usuario->loadById(1);
+
+    echo $usuario;
+
+    echo "<br/> <strong> 2 - Buscar todos os usuários </strong> <br/>";  
+
+    // Trazer todos os usuários usando método ESTÁTICO
+
+    $usuarios = Usuario::getAllUsers();
 
     echo json_encode($usuarios);
+
+
+    echo "<br/> <strong> 3 - Filtrar usuários </strong> <br/>";  
+
+    $search = Usuario::search("us");
+    
+    echo json_encode($search);
+
+
+    echo "<br/> <strong> 4 - Validar usuário </strong> <br/>"; 
+    
+    $maria = new Usuario();
+
+    $maria->login("maria","99999996441");
+
+
+
 
 ?>
