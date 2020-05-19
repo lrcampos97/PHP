@@ -34,9 +34,31 @@
     
     $maria = new Usuario();
 
-    $maria->login("maria","99999996441");
+    $maria->login("paula","123");
 
 
+    echo "<br/> <strong> 5 - Incluir novo usuários </strong> <br/>"; 
 
+    $carlos = new Usuario("carlos","654sadadas");
+
+    //$carlos->insert(); // INCLUIR NOVO USUÁRIO
+
+    echo "<br/> <strong> 6 - Atualizar dados usuário </strong> <br/>"; 
+
+    $usuario = new Usuario();
+
+    $usuario->loadById(3);
+
+    $usuario->update("paula", "123");
+
+    echo $usuario;
+
+    echo "<br/> <strong> 7 - Exclusão de usuário </strong> <br/>"; 
+    
+    $usuario = new Usuario();
+
+    $usuario->loadById(5);
+
+    $usuario->delete();
 
 ?>

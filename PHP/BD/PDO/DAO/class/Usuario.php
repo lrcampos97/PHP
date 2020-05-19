@@ -40,6 +40,47 @@
         }
 
 
+        public function __construct($deslogin = "", $dessenha = ""){
+
+            $this->setDeslogin($deslogin);
+            $this->setDessenha($dessenha);
+
+        }
+
+        public function update($deslogin, $dessenha){
+
+            $this->setDeslogin($deslogin);
+            $this->setDessenha($dessenha);            
+
+            $sql = new sql();
+
+            $sql->query("UPDATE tb_usuarios set deslogin = :DESLOGIN, dessenha = :DESSENHA WHERE idusuario = :ID",array(
+                ":DESLOGIN"=>$this->getDeslogin(),
+                ":DESSENHA"=>$this->getDessenha(),
+                ":ID"=>$this->getIdusuario()
+            ));            
+
+
+            echo "Usuario atualizado com sucesso!!<br/>";
+        }
+
+
+        public function delete(){
+
+            $sql = new sql();
+
+            $sql->query("DELETE FROM tb_usuarios WHERE idusuario = :ID",array( 
+                ":ID"=>$this->getIdusuario()
+            ));
+
+            $this->setIdusuario(0);
+            $this->setDeslogin("");
+            $this->setDessenha(""); 
+
+            echo "Usuário excluído com sucesso!";
+
+        }
+
         public function setData($row){
 
             $this->setIdusuario($row['idusuario']);
@@ -61,6 +102,24 @@
                 $this->setData($row);
             }
 
+        }
+
+
+        public function insert(){
+            $sql = new sql();
+
+            $results = $sql->select("CALL sp_usuarios_insert(:LOGIN,:SENHA)",array(
+                ":LOGIN"=>$this->getDeslogin(),
+                ":SENHA"=>$this->getDessenha()
+            ));
+
+            if (count($results) >0 ){
+                $this->setData($results[0]);
+
+                echo "Usuário <strong>" . $this->getDeslogin() . "</strong> incluído com sucesso!!!!! <br/>";
+            } else {
+                echo "Não foi possível incluir o usuário.";
+            }
         }
         
 
