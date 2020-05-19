@@ -256,6 +256,7 @@
         json_decode(colocar true para transformar em array)
         define("nome",valor) -> constante
         array_sum() -> para somar todos os valores de um array.
+        in_array() -> Checks if a value exists in an array
     */         
     
     echo "<br/> <strong> 9 - ARRAYS </strong> <br/>";     
