@@ -24,7 +24,7 @@
         echo "Diretório <strong> $name </strong> já existe!!";
     }
 
-    echo "<br/> <strong> 2 - PESQUISANDO ARQUIVOS  </strong> <br/>"; 
+    echo "<br/> <strong> 2 - PESQUISANDO ARQUIVOS DIRETÓRIO </strong> <br/>"; 
 
     $images = scandir("images");
 
@@ -48,5 +48,37 @@
     echo json_encode($data);
 
 
+    echo "<br/> <strong> 3 - CRIANDO E ABRINDO ARQUIVOS </strong> <br/>";
+
+    $dir = "files";
+
+    if (is_dir($dir)){
+        $file = fopen($dir . DIRECTORY_SEPARATOR . "log.txt","w+");
+
+        fwrite($file,"Testeeeee ARQUIVOS" . "\r\n" . "outro testeee CRIAANDO");
+    
+        fclose($file);
+
+        echo "Arquivo criado e gravado com sucesso!!";
+    } else {
+        echo "Diretório <strong> $dir </strong> não encontrado!";
+    }
+
+
+    echo "<br/> <strong> 4 - EXCLUIR ARQUIVOS </strong> <br/>";
+
+    $dir = "files";
+
+    if (is_dir($dir)){
+       $file = fopen($dir . DIRECTORY_SEPARATOR . "ARQUIVO_EXCLUIR.txt","w+");    
+
+       fclose($file);
+        
+        echo "Arquivo <strong> ARQUIVO_EXCLUIR.txt </strong> criado!! <br>";
+    }
+
+    unlink($dir . DIRECTORY_SEPARATOR . "ARQUIVO_EXCLUIR.txt");
+
+    echo "<br> Arquivo  <strong> ARQUIVO_EXCLUIR.txt </strong> excluído"
 
 ?>
