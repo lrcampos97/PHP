@@ -8,7 +8,7 @@
         pathinfo -> PEGAR INFORMAÇÕES DO ARQUIVO
         filesize -> tamanho do arquivo
         filemtime -> data na qual foi alterado.
-        
+        implode -> pegar um array e transformar em uma string de uma linha (explode é o contrário)
     */   
 
     echo "<br/> <strong> 1 - CRIANDO DIRETÓRIO  </strong> <br/>"; 
@@ -79,6 +79,32 @@
 
     unlink($dir . DIRECTORY_SEPARATOR . "ARQUIVO_EXCLUIR.txt");
 
-    echo "<br> Arquivo  <strong> ARQUIVO_EXCLUIR.txt </strong> excluído"
+    echo "<br> Arquivo  <strong> ARQUIVO_EXCLUIR.txt </strong> excluído <br>";
+
+    echo "<br/> <strong> 5 - LER CONTEÚDO DE ARQUIVOS </strong> <br/>";
+
+    $filename = "images" . DIRECTORY_SEPARATOR ."php7.png";
+
+
+
+    if (file_exists($filename)) {
+
+        $base64 = base64_encode(file_get_contents($filename));
+
+        // ver o tipo
+
+        $fileInfo = new finfo(FILEINFO_MIME_TYPE);
+
+        $mimeType = $fileInfo->file($filename);
+
+        $base64encode = "data:" . $mimeType . ";base64," . $base64;
+
+    } else {
+        echo "Arquivo de imagem não encontrado.";
+    }
+
+    // $html = " <img src=".$base64encode.">";
+
+    // echo $html;
 
 ?>

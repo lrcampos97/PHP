@@ -257,6 +257,7 @@
         define("nome",valor) -> constante
         array_sum() -> para somar todos os valores de um array.
         in_array() -> Checks if a value exists in an array
+        implode -> pegar um array e transformar em uma string de uma linha (explode é o contrário)
     */         
     
     echo "<br/> <strong> 9 - ARRAYS </strong> <br/>";     
