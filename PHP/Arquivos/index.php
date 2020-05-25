@@ -107,4 +107,43 @@
 
     // echo $html;
 
+    echo "<br/> <strong> 6 - UPLOAD DE ARQUIVOS </strong> <br/>";   
+    
+    $htmlARQUIVO = 
+    "<form method='POST' enctype='multipart/form-data'>
+        <input type='file' name='fileUpload'>
+
+        <button type='submit'> Send </button>
+    </form>";
+
+    echo $htmlARQUIVO;
+
+
+    if ($_SERVER["REQUEST_METHOD"] === "POST"){
+        $file = $_FILES["fileUpload"];
+
+        if ($file["error"]){
+            throw new Exception("Error:" . $file["error"], 1);            
+        }
+
+
+        $dirUploads = "uploads";
+
+        if (!is_dir($dirUploads)){
+            mkdir($dirUploads);
+        }
+
+        if (move_uploaded_file($file["tmp_name"], $dirUploads . DIRECTORY_SEPARATOR . $file["name"])){
+            echo "Upload realizado com sucesso";
+        } else {
+            throw new Exception("Erro ao tentar realizar o upload", 1);    
+        }
+    }    
+
 ?>
+<!-- 
+<form method="POST" enctype="multipart/form-data">
+    <input type="file" name="fileUpload">
+
+    <button type="submit"> Send </button>
+</form> -->
