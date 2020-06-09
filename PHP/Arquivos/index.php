@@ -9,6 +9,8 @@
         filesize -> tamanho do arquivo
         filemtime -> data na qual foi alterado.
         implode -> pegar um array e transformar em uma string de uma linha (explode é o contrário)
+        cURL -> para consumir WS
+        Cookie -> arquivo de texto que armazena informações na máquina do usuário (se nao colocar data o cookie morre na hora que o navegador fecha)
     */   
 
     echo "<br/> <strong> 1 - CRIANDO DIRETÓRIO  </strong> <br/>"; 
@@ -108,42 +110,130 @@
     // echo $html;
 
     echo "<br/> <strong> 6 - UPLOAD DE ARQUIVOS </strong> <br/>";   
+
+    /******* COMENTADO APENAS PARA NÃO INTERFERIR EM OUTRAS AULAS ******/
+
+    // $htmlARQUIVO = 
+    // "<form method='POST' enctype='multipart/form-data'>
+    //     <input type='file' name='fileUpload'>
+
+    //     <button type='submit'> Send </button>
+    // </form>";
+
+    // echo $htmlARQUIVO;
+
+
+    // if ($_SERVER["REQUEST_METHOD"] === "POST"){
+    //     $file = $_FILES["fileUpload"];
+
+    //     if ($file["error"]){
+    //         throw new Exception("Error:" . $file["error"], 1);            
+    //     }
+
+
+    //     $dirUploads = "uploads";
+
+    //     if (!is_dir($dirUploads)){
+    //         mkdir($dirUploads);
+    //     }
+
+    //     if (move_uploaded_file($file["tmp_name"], $dirUploads . DIRECTORY_SEPARATOR . $file["name"])){
+    //         echo "Upload realizado com sucesso";
+    //     } else {
+    //         throw new Exception("Erro ao tentar realizar o upload", 1);    
+    //     }
+    // }    
+
+    echo "<br/> <strong> 7 - DOWNLOAD ARQUIVOS </strong> <br/>";
+
+    $link = "https://www.google.com.br/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png";
+
+    $content = file_get_contents($link);
+
+    $parse = parse_url($link);
+
+    $baseName = basename($parse["path"]); // pegar apenas o nome do arquivo
+
+    $diretorio = "images";
     
-    $htmlARQUIVO = 
-    "<form method='POST' enctype='multipart/form-data'>
-        <input type='file' name='fileUpload'>
+    if (is_dir($diretorio)){
+        $file = fopen($diretorio . DIRECTORY_SEPARATOR . $baseName, "w+"); // CRIAR O ARQUIVO  
+        
+        fwrite($file, $content); /// criar um clone da imagem
 
-        <button type='submit'> Send </button>
-    </form>";
-
-    echo $htmlARQUIVO;
-
-
-    if ($_SERVER["REQUEST_METHOD"] === "POST"){
-        $file = $_FILES["fileUpload"];
-
-        if ($file["error"]){
-            throw new Exception("Error:" . $file["error"], 1);            
-        }
+        fclose($file); // fechar o arquivo
+    }
+    
+    echo "Download realizado com sucesso";
 
 
-        $dirUploads = "uploads";
+    echo "<br/> <strong> 8 - MOVENDO ARQUIVOS </strong> <br/>";
 
-        if (!is_dir($dirUploads)){
-            mkdir($dirUploads);
-        }
+    $dir1 = "Folder_1";
+    $dir2 = "Folder_2";
 
-        if (move_uploaded_file($file["tmp_name"], $dirUploads . DIRECTORY_SEPARATOR . $file["name"])){
-            echo "Upload realizado com sucesso";
-        } else {
-            throw new Exception("Erro ao tentar realizar o upload", 1);    
-        }
-    }    
+    if (!is_dir($dir1)) mkdir($dir1);
 
+    if (!is_dir($dir2)) mkdir($dir2);
+
+    $nomeArquivo = "README.txt";
+
+    if (!file_exists($dir1 . DIRECTORY_SEPARATOR . $nomeArquivo)){
+
+        $arquivo = fopen($dir1 . DIRECTORY_SEPARATOR . $nomeArquivo, "w+");
+
+        fwrite($arquivo, date("Y-m-d H:i:s"));
+
+        fclose($arquivo);
+    }
+
+
+    rename(
+            $dir1 . DIRECTORY_SEPARATOR . $nomeArquivo, // mover da origem
+            $dir2 . DIRECTORY_SEPARATOR . $nomeArquivo // PARA O DESTINO
+    );
+
+    echo "Arquivo movido com sucesso!";
+
+
+    echo "<br/> <strong> 9 - cURL </strong> <br/>";
+
+    $cep = "94950555";
+    $link = "http://viacep.com.br/ws/$cep/json";
+
+    $ch = curl_init($link);
+
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
+
+    $response = curl_exec($ch);
+
+    curl_close($ch);
+
+    $data = json_decode($response, true);
+
+    print_r($data);
+
+
+    echo "<br/> <strong> 10 - USANDO COOKIES </strong> <br/>";
+
+    $data = array(
+        "nome_empresa"=>"Teste nome empresa",
+        "endereco"=>"rua iguaçu, 31"
+    );
+
+
+    setcookie("NOME_DO_COOKIE",json_encode($data), time() + 3600);
+
+    echo "Cookie armazenado com sucesso";
+
+    // CONSUMIR ALGUM COOKIE
+
+    if (isset($_COOKIE["NOME_DO_COOKIE"])){
+
+        echo "<br> valor cookie: <br>";
+        
+        var_dump(json_decode($_COOKIE["NOME_DO_COOKIE"], true));
+
+    }
 ?>
-<!-- 
-<form method="POST" enctype="multipart/form-data">
-    <input type="file" name="fileUpload">
-
-    <button type="submit"> Send </button>
-</form> -->
