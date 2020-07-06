@@ -1,0 +1,17 @@
+{
+    "name": "cursophp/composer",
+    "description": "Pacote referente ao curso de PHP, apenas para teste.",
+    "type": "project",
+    "authors": [
+        {
+            "name": "Luiz Felipe Campos",
+            "email": "campos.luiz97@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+        "monolog/monolog":"1.0.*",
+        "phpmailer/phpmailer": "dev-master",
+        "rain/raintpl": ">=3.0.0"
+    }
+}
