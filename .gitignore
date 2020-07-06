@@ -1,0 +1,4 @@
+# lembre de colocar o nome da pasta sem o ponto na frente
+
+# Para ignorar todos os arquivos e sub-pastas da pasta vendor/
+vendor/
