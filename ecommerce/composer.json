@@ -1,0 +1,19 @@
+{
+    "name": "lrcampos97/ecommerce",
+    "description": "Package from Ecommerce project with PHP.",
+    "authors": [
+        {
+            "name": "Luiz Felipe Campos"
+        }
+    ],
+    "require": {
+    	"phpmailer/phpmailer":"~6.1",
+    	"slim/slim":"2.0",
+    	"rain/raintpl":">=3.0.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "": "vendor\\lrcampos97\\php-classes\\src"
+        }
+    }
+}
