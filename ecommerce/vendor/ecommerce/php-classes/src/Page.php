@@ -12,6 +12,8 @@ class Page {
 
     private $options = [];
     private $defaults = [ // data default to config TPL settings
+        "header"=> true,
+        "footer"=> true,
         "data"=> []
     ];
 
@@ -31,7 +33,11 @@ class Page {
 
         $this->setData($this->options["data"]); // assign key and value for TPL template. Variables that will show at template
 
-        $this->tpl->draw("header"); // first file to load, by default all pages have a "header"
+        if ($this->options["header"] === true){
+
+            $this->tpl->draw("header"); // first file to load, by default all pages have a "header"
+        }
+        
     }
 
     private function setData($data = array()){
@@ -47,7 +53,10 @@ class Page {
     }
 
     public function __destruct(){
-        $this->tpl->draw("footer"); // first file to load, by default all pages have a "footer"
+        
+        if ($this->options["footer"] === true){
+            $this->tpl->draw("footer"); // first file to load, by default all pages have a "footer"
+        }
     }
 
 }
