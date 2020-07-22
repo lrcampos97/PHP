@@ -4,11 +4,14 @@ namespace Ecommerce\Model;
 
 use \Ecommerce\DB\Sql;
 use \Ecommerce\Model;
+use \Ecommerce\Mailer;
 
 
 class User extends Model{ 
 
     const SESSION = "User";
+    const SECRET = "HcodePhp7_Secret";
+	const SECRET_IV = "HcodePhp7_Secret_IV";
 
 
     // CRIAR O MÉTODO CONTRUCTOR AQUI
@@ -80,6 +83,59 @@ class User extends Model{
 
     public static function logout(){
         $_SESSION[User::SESSION] = NULL;
+    }
+
+    public static function getForgot($email){
+
+        $sql = new Sql();
+
+        $results = $sql->select("
+            SELECT * 
+            FROM tb_persons per
+            INNER JOIN  tb_users usu USING(idperson)
+            WHERE  per.desemail = :email
+        ",array(
+                "email"=>$email
+        ));
+
+        if (count($results) === 0){
+            throw new Exception("Não foi possível recuperar a senha.");            
+        } else {
+
+            $data = $results[0];
+
+            $resultsRecovery = $sql->select("CALL sp_userspasswordsrecoveries_create(:iduser, :desip)", array(
+                ":iduser"=> $data["iduser"],
+                ":desip"=> $_SERVER["REMOTE_ADDR"]
+            ));
+
+            if (count($resultsRecovery[0]) == 0){
+                throw new Exception("Não foi possível recuperar a senha.");     
+            } else {
+
+                $dataRecovery = $resultsRecovery[0];
+
+                $code = openssl_encrypt($dataRecovery['idrecovery'], 'AES-128-CBC', pack("a16", User::SECRET), 0, pack("a16", User::SECRET_IV)); // CRIPTOGRAFIA SEGURA
+
+                $link = "http://www.ecommerce.com.br/admin/forgot/reset?code=$code";
+
+                //ENVIAR EMAIL PARA REDEFINIR SENHA
+
+                $mailer = new Mailer($data["desemail"], $data["desperson"], "Redefinir senha do E-commerce Store","forgot",array(
+                    "name"=>$data["desperson"],
+                    "link"=>$link
+                ));
+
+
+                $mailer->send();
+
+                return $data;
+
+            }
+
+        }
+
+
     }
 
 

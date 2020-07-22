@@ -98,7 +98,7 @@ $app->post('/admin/users/create', function(){
 	$user = new User();
 
 	$_POST["inadmin"] = (isset($_POST["inadmin"])) ? 1 : 0;
-	
+
 
 	$_POST['despassword'] = password_hash($_POST["despassword"], PASSWORD_DEFAULT, [
 
@@ -161,6 +161,38 @@ $app->post('/admin/users/:iduser', function($iduser){
 
 	header("Location: /admin/users");
 	exit;
+
+});
+
+
+$app->get('/admin/forgot', function(){
+
+	$page = new Ecommerce\PageAdmin([
+		"header"=> false,
+		"footer"=> false
+	]);
+
+	$page->setTpl("forgot");	
+
+});
+
+$app->post('/admin/forgot', function(){
+
+	$user = User::getForgot($_POST["email"]);	
+
+	header("Location: /admin/forgot/sent");
+	exit;
+
+});
+
+$app->get('/admin/forgot/sent', function(){
+
+	$page = new Ecommerce\PageAdmin([
+		"header"=> false,
+		"footer"=> false
+	]);
+
+	$page->setTpl("forgot-reset-success");	
 
 });
 
