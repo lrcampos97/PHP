@@ -10,8 +10,18 @@ class User extends Model{
 
     const SESSION = "User";
 
-    public static function login($login, $password){
 
+    // CRIAR O MÉTODO CONTRUCTOR AQUI
+
+
+    public  function __construct($iduser = 0){
+        if ($iduser !== 0){
+            $this->get($iduser);    
+        }
+    }
+
+
+    public static function login($login, $password){
         $sql = new Sql();
 
         $results = $sql->select("SELECT * FROM tb_users WHERE deslogin = :LOGIN", array(
@@ -25,8 +35,7 @@ class User extends Model{
         }
 
         $data = $results[0];
-
-
+        
         if (password_verify($password, $data["despassword"]) === true){
             $user = new User();
 
@@ -61,10 +70,78 @@ class User extends Model{
         }        
     }
 
+    public static function listAll(){
+        
+        $sql = new Sql();
+
+        return $sql->select("SELECT * FROM tb_users usu INNER JOIN tb_persons per USING(idperson) ORDER BY per.desperson"); // USING -> função utilizada com o JOIN no Mysql quando o campo é o mesmo em ambas tabelas             
+    }
+
 
     public static function logout(){
         $_SESSION[User::SESSION] = NULL;
     }
+
+
+    public function save(){
+        
+        $sql = new Sql();
+
+
+        $results = $sql->select("CALL sp_users_save(:desperson, :deslogin, :despassword, :desemail, :nrphone, :inadmin)", array(
+            ":desperson"=> $this->getdesperson(), // ESTES MÉTODOS SÃO GERADOS DE FORMA AUTOMATICA PELA CLASSE MODEL
+            ":deslogin"=> $this->getdeslogin(),
+            ":despassword"=> $this->getdespassword(),
+            ":desemail"=> $this->getdesemail(),
+            ":nrphone"=> $this->getnrphone(),
+            ":inadmin"=> $this->getinadmin()
+        ));
+
+
+        $this->setData($results[0]);
+    }
+
+    public function get($iduser){
+
+
+        $sql = new Sql();
+
+        $results = $sql->select("SELECT * FROM tb_users usu INNER JOIN tb_persons per USING(idperson) WHERE usu.iduser = :iduser", array(
+            ":iduser"=>$iduser
+        ));
+
+        $this->setData($results[0]);
+
+    }
+
+    public function update(){
+        //sp_usersupdate_save
+
+        $sql = new Sql();
+
+
+        $results = $sql->select("CALL sp_usersupdate_save(:iduser, :desperson, :deslogin, :despassword, :desemail, :nrphone, :inadmin)", array(
+            ":iduser"=> $this->getiduser(),
+            ":desperson"=> $this->getdesperson(), // ESTES MÉTODOS SÃO GERADOS DE FORMA AUTOMATICA PELA CLASSE MODEL
+            ":deslogin"=> $this->getdeslogin(),
+            ":despassword"=> $this->getdespassword(),
+            ":desemail"=> $this->getdesemail(),
+            ":nrphone"=> $this->getnrphone(),
+            ":inadmin"=> $this->getinadmin()
+        ));
+
+
+        $this->setData($results[0]);        
+    }
+
+    public function delete(){
+
+        $sql = new Sql();
+
+        $sql->query("CALL sp_users_delete(:iduser)",array(
+            ":iduser"=>$this->getiduser()
+        ));
+    }   
 }
 
 ?>
