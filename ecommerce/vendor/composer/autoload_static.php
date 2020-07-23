@@ -7,10 +7,6 @@ namespace Composer\Autoload;
 class ComposerStaticInit7f2f15d6530d2bc60bc361b3a6f533af
 {
     public static $prefixLengthsPsr4 = array (
-        'P' => 
-        array (
-            'PHPMailer\\PHPMailer\\' => 20,
-        ),
         'E' => 
         array (
             'Ecommerce\\' => 10,
@@ -18,10 +14,6 @@ class ComposerStaticInit7f2f15d6530d2bc60bc361b3a6f533af
     );
 
     public static $prefixDirsPsr4 = array (
-        'PHPMailer\\PHPMailer\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/phpmailer/phpmailer/src',
-        ),
         'Ecommerce\\' => 
         array (
             0 => __DIR__ . '/..' . '/ecommerce/php-classes/src',
@@ -45,12 +37,24 @@ class ComposerStaticInit7f2f15d6530d2bc60bc361b3a6f533af
         ),
     );
 
+    public static $classMap = array (
+        'EasyPeasyICS' => __DIR__ . '/..' . '/phpmailer/phpmailer/extras/EasyPeasyICS.php',
+        'PHPMailer' => __DIR__ . '/..' . '/phpmailer/phpmailer/class.phpmailer.php',
+        'PHPMailerOAuth' => __DIR__ . '/..' . '/phpmailer/phpmailer/class.phpmaileroauth.php',
+        'PHPMailerOAuthGoogle' => __DIR__ . '/..' . '/phpmailer/phpmailer/class.phpmaileroauthgoogle.php',
+        'POP3' => __DIR__ . '/..' . '/phpmailer/phpmailer/class.pop3.php',
+        'SMTP' => __DIR__ . '/..' . '/phpmailer/phpmailer/class.smtp.php',
+        'ntlm_sasl_client_class' => __DIR__ . '/..' . '/phpmailer/phpmailer/extras/ntlm_sasl_client.php',
+        'phpmailerException' => __DIR__ . '/..' . '/phpmailer/phpmailer/class.phpmailer.php',
+    );
+
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
             $loader->prefixLengthsPsr4 = ComposerStaticInit7f2f15d6530d2bc60bc361b3a6f533af::$prefixLengthsPsr4;
             $loader->prefixDirsPsr4 = ComposerStaticInit7f2f15d6530d2bc60bc361b3a6f533af::$prefixDirsPsr4;
             $loader->prefixesPsr0 = ComposerStaticInit7f2f15d6530d2bc60bc361b3a6f533af::$prefixesPsr0;
+            $loader->classMap = ComposerStaticInit7f2f15d6530d2bc60bc361b3a6f533af::$classMap;
 
         }, null, ClassLoader::class);
     }

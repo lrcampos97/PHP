@@ -52,7 +52,7 @@ $app->get('/admin/login', function() {
 $app->post('/admin/login', function() {
 
 	User::login($_POST["login"], $_POST["password"]);
-
+	
 	header("Location: /admin"); // navegar para a página de administrador
 	exit;
 });
@@ -80,6 +80,7 @@ $app->get('/admin/users', function(){
 
 });
 
+// CRIAR NOVO USUÁRIO
 $app->get('/admin/users/create', function(){
 
 	User::verifyLogin();
@@ -164,8 +165,8 @@ $app->post('/admin/users/:iduser', function($iduser){
 
 });
 
-
-$app->get('/admin/forgot', function(){
+// ESQUECI MINHA SENHA
+$app->get('/forgot', function(){
 
 	$page = new Ecommerce\PageAdmin([
 		"header"=> false,
@@ -176,15 +177,17 @@ $app->get('/admin/forgot', function(){
 
 });
 
-$app->post('/admin/forgot', function(){
+// POST ESQUECI MINHA SENHA 
+$app->post('/forgot', function(){
 
-	$user = User::getForgot($_POST["email"]);	
+	$user = User::getForgot($_POST["email"], false);	
 
 	header("Location: /admin/forgot/sent");
 	exit;
 
 });
 
+// EMAIL ENVIADO
 $app->get('/admin/forgot/sent', function(){
 
 	$page = new Ecommerce\PageAdmin([
@@ -192,8 +195,50 @@ $app->get('/admin/forgot/sent', function(){
 		"footer"=> false
 	]);
 
-	$page->setTpl("forgot-reset-success");	
+	$page->setTpl("forgot-sent");	
 
+});
+
+// RESETAR SENHAR
+$app->get('/admin/forgot/reset', function(){
+
+
+	$user = User::validForgotDecrypt($_GET["code"]);
+
+	$page = new Ecommerce\PageAdmin([
+		"header"=> false,
+		"footer"=> false
+	]);
+	
+	$page->setTpl("forgot-reset", array(
+		"name"=>$user["desperson"],
+		"code"=>$_GET["code"]
+	));	
+});
+
+$app->post("/admin/forgot/reset", function(){
+
+	$forgot = User::validForgotDecrypt($_POST["code"]); // verificar novamente o código	
+
+	User::setForgotUsed($forgot["idrecovery"]); // setar na tabela a data que foi utilizado o código de recuperação
+
+	$user = new User($forgot["iduser"]);
+
+
+	$newPassword = password_hash($_POST["password"], PASSWORD_DEFAULT, [ //encriptografar senha
+
+		"cost"=>12 // quanto mais mais seguro, porém também requer mais processamento
+
+	]);
+
+	$user->setPassword($newPassword);
+
+	$page = new Ecommerce\PageAdmin([
+		"header"=> false,
+		"footer"=> false
+	]);
+	
+	$page->setTpl("forgot-reset-success");		
 });
 
 $app->run();
