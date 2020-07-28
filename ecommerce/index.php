@@ -329,6 +329,19 @@ $app->post('/admin/categories/:idcategory', function($idcategory){
 	exit;
 });
 
+$app->get('/categories/:idcategory',function($idcategory){
+
+	$category = new Category($idcategory);
+	
+	$page = new Ecommerce\Page();
+
+	$page->setTpl("category",[
+		"category"=>$category->getValues(),
+		"products"=>[]
+	]);
+
+});
+
 $app->run();
 
 

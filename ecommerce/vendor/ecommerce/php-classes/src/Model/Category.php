@@ -23,6 +23,19 @@ class Category extends Model {
     }
 
 
+    public static function updateView(){
+
+        $categories = Category::listAll();
+
+        $html = []; // montar o html com as categorias
+
+        foreach ($categories as $value) {
+            array_push($html, '<li><a href="/categories/'. $value["idcategory"] .'">'. $value["descategory"] . '</a></li>' );
+        }
+
+        file_put_contents($_SERVER["DOCUMENT_ROOT"] . DIRECTORY_SEPARATOR . "views" . DIRECTORY_SEPARATOR . "categories-menu.html", implode('', $html)); // incluir o HTML no arquivo        
+    }
+
     public function get($idcategory){
 
         $sql = new Sql();
@@ -42,6 +55,8 @@ class Category extends Model {
         $sql->query("DELETE FROM tb_categories WHERE idcategory = :idcategory",array(
             ":idcategory"=>$this->getidcategory()
         ));
+
+        Category::updateView();
     }   
 
     public function save(){
@@ -54,8 +69,9 @@ class Category extends Model {
             ":descategory"=> $this->getdescategory()
         ));
 
-
         $this->setData($results[0]);
+
+        Category::updateView();
     }    
 
 }
