@@ -22,6 +22,18 @@ class Product extends Model {
         return $sql->select("SELECT * FROM tb_products ORDER BY desproduct"); 
     }
 
+    public static function checkList($list){ // função para tratar as imagens dos produtos, pelo fato das mesmas não estarem no BD
+
+        foreach ($list as &$row) { // O "&" serve para que eu possa alterar a variavel "row" e consequentemente, alterar o valor dentro do array.
+            
+            $p = new Product();
+            $p->setData($row);
+            $row = $p->getValues();
+        }
+
+        return $list;
+    }
+        
 
     public function get($idproduct){
 
@@ -30,7 +42,7 @@ class Product extends Model {
         $results = $sql->select("SELECT * FROM tb_products prod WHERE prod.idproduct = :idproduct", array(
             ":idproduct"=>$idproduct
         ));
-
+        
         $this->setData($results[0]);        
     }
 
@@ -97,10 +109,10 @@ class Product extends Model {
         return $values;
     }
 
-    public function setPhoto($file){
+    public function setPhoto($file){        
 
-        
         if ($file["name"] !== ''){
+
             $extension = explode('.',  $file["name"]);
             $extension = end($extension);
 
@@ -114,7 +126,7 @@ class Product extends Model {
                     $image = imagecreatefromgif($file["tmp_name"]);
                     break;
 
-                case 'pnh':
+                case 'png':
                     $image = imagecreatefrompng($file["tmp_name"]);
                     break;                
             }
