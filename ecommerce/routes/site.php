@@ -2,6 +2,7 @@
 
 use \Ecommerce\Page;
 use \Ecommerce\Model\Product;
+use \Ecommerce\Model\Category;
 
 // INDEX DO E-COMMERCE
 $app->get('/', function() {
@@ -16,6 +17,19 @@ $app->get('/', function() {
 	
 });
 
+
+$app->get('/categories/:idcategory',function($idcategory){
+	
+	$category = new Category($idcategory);
+	
+	$page = new Ecommerce\Page();
+
+	$page->setTpl("category",[
+		"category"=>$category->getValues(),
+		"products"=>Product::checkList($category->getProducts())
+	]);
+
+});
 
 
 ?>
