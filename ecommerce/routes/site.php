@@ -3,6 +3,7 @@
 use \Ecommerce\Page;
 use \Ecommerce\Model\Product;
 use \Ecommerce\Model\Category;
+use \Ecommerce\Model\Cart;
 
 // INDEX DO E-COMMERCE
 $app->get('/', function() {
@@ -45,6 +46,32 @@ $app->get('/categories/:idcategory',function($idcategory){
 	]);
 
 });
+
+
+$app->get('/products/:desurl', function($desurl){
+
+	$product = new Product();
+
+	$product->getFromUrl($desurl);
+
+	$page = new Ecommerce\Page();
+
+	$page->setTpl("product-detail",[
+		"product"=>$product->getValues(),
+		"categories"=>$product->getCategories()
+	]);
+
+});
+
+$app->get('/cart', function(){
+
+	$cart = Cart::getFromSession();
+
+	$page = new Ecommerce\Page();
+
+	$page->setTpl("cart");
+
+})
 
 
 ?>

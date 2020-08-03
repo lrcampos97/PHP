@@ -23,6 +23,52 @@ class User extends Model{
         }
     }
 
+    public static function getFromSession(){
+
+		$user = new User();
+
+		if (isset($_SESSION[User::SESSION]) && (int)$_SESSION[User::SESSION]['iduser'] > 0) {
+
+			$user->setData($_SESSION[User::SESSION]);
+
+		}
+
+		return $user;        
+    }
+
+
+	public static function checkLogin($inadmin = true)
+	{
+
+		if (
+			!isset($_SESSION[User::SESSION])
+			||
+			!$_SESSION[User::SESSION]
+			||
+			!(int)$_SESSION[User::SESSION]["iduser"] > 0
+		) {
+			//Não está logado
+			return false;
+
+		} else {
+
+			if ($inadmin === true && (bool)$_SESSION[User::SESSION]['inadmin'] === true) {
+
+				return true;
+
+			} else if ($inadmin === false) {
+
+				return true;
+
+			} else {
+
+				return false;
+
+			}
+
+		}
+
+	}    
 
     public static function login($login, $password){
         $sql = new Sql();
@@ -58,19 +104,17 @@ class User extends Model{
 
 
     public static function verifyLogin($inadmin = true){ // verificar se o usuário está logado 
+        
+		if (!User::checkLogin($inadmin)) {
 
-        if (
-            !isset($_SESSION[User::SESSION]) // SE EXISTE A SESSÃO
-            ||
-            !$_SESSION[User::SESSION] //SE A SESSÃO NAO ESTÁ VAZIA
-            || 
-            !(int)$_SESSION[User::SESSION]["iduser"] > 0 // se o ID do usuário setado na session, for > 0
-            || 
-            (bool)$_SESSION[User::SESSION]["inadmin"] !== $inadmin )
-        {
-            header("Location: /admin/login");
-            exit;
-        }        
+			if ($inadmin) {
+				header("Location: /admin/login");
+			} else {
+				header("Location: /login");
+			}
+			exit;
+
+		}     
     }
 
     public static function listAll(){
