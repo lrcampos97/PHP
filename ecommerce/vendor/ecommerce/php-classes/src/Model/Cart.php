@@ -108,9 +108,57 @@ class Cart extends Model {
 			':nrdays'=>$this->getnrdays()
 		]);
 
-        var_dump($this->getiduser());
-
 		$this->setData($results[0]);   
-    } 
+	} 
+	
+
+	public function addProduct(Product $product, $qtde = 1){
+		
+		$sql = new Sql();
+
+		$sql->query("INSERT INTO tb_cartsproducts (idcart, idproduct) VALUES(:idcart, :idproduct)", [
+			':idcart'=>$this->getidcart(),
+			':idproduct'=>$product->getidproduct()
+		]);	
+
+	}
+
+	public function removeProduct(Product $product, $all = false){
+
+		$sql = new Sql();
+
+		if ($all) {
+
+			$sql->query("UPDATE tb_cartsproducts SET dtremoved = NOW() WHERE idcart = :idcart AND idproduct = :idproduct AND dtremoved IS NULL", [
+				':idcart'=>$this->getidcart(),
+				':idproduct'=>$product->getidproduct()
+			]);
+
+		} else {
+
+			$sql->query("UPDATE tb_cartsproducts SET dtremoved = NOW() WHERE idcart = :idcart AND idproduct = :idproduct AND dtremoved IS NULL LIMIT 1", [
+				':idcart'=>$this->getidcart(),
+				':idproduct'=>$product->getidproduct()
+			]);
+
+		}
+
+	}
+
+	public function getProducts(){
+
+		$sql = new Sql();
+
+		$results = $sql->select("		
+		SELECT b.idproduct, b.desproduct, b.vlprice, b.vlwidth, b.vlheight, b.vllength, b.vlweight, b.desurl, COUNT(*) as nrqtd, SUM(b.vlprice) AS vltotal 
+		FROM tb_cartsproducts a INNER JOIN tb_products b USING(idproduct) 
+		WHERE a.idcart = :idcart AND a.dtremoved IS NULL 
+		GROUP BY b.idproduct, b.desproduct, b.vlprice, b.vlwidth, b.vlheight, b.vllength, b.vlweight, b.desurl  ORDER BY b.desproduct				
+		", [
+			":idcart"=>$this->getidcart()
+		]);
+
+		return Product::checkList($results);		
+	}
 }
 ?>

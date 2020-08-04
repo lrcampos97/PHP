@@ -18,7 +18,7 @@ $app->get('/', function() {
 	
 });
 
-
+//CARREGAR PRODUTOS DA CATEGORIA
 $app->get('/categories/:idcategory',function($idcategory){
 
 	$pageNumber = (isset($_GET['page'])) ? (int)$_GET['page'] : 1;
@@ -47,7 +47,7 @@ $app->get('/categories/:idcategory',function($idcategory){
 
 });
 
-
+//DETALHES DO PRODUTO
 $app->get('/products/:desurl', function($desurl){
 
 	$product = new Product();
@@ -63,15 +63,64 @@ $app->get('/products/:desurl', function($desurl){
 
 });
 
+// CARRINHO DE COMPRA
 $app->get('/cart', function(){
 
 	$cart = Cart::getFromSession();
 
 	$page = new Ecommerce\Page();
 
-	$page->setTpl("cart");
+	$page->setTpl("cart",[
+		"cart"=>$cart->getValues(),
+		"products"=>$cart->getProducts()
+	]);
 
+});
+
+// ADICIONAR PRODUTO NO CARRINHO
+$app->get('/cart/:idproduct/add', function($idproduct){
+
+	$product = new Product($idproduct);
+
+	$cart = Cart::getFromSession();
+
+	$qtd = (isset($_GET["qtd"])) ? (int)$_GET["qtd"] : 1;
+	
+
+	for ($i=0; $i < $qtd ; $i++) { 
+		
+		$cart->addProduct($product);
+
+	}	
+
+	header("Location: /cart");
+	exit;
+});
+
+// REMOVER UMA ÚNICA UNIDADE DO PRODUTO
+$app->get('/cart/:idproduct/minus', function($idproduct){
+
+	$product = new Product($idproduct);
+
+	$cart = Cart::getFromSession();
+
+	$cart->removeProduct($product);
+
+	header("Location: /cart");
+	exit;
+});
+
+// REMOVER PRODUTO DO CARRINHO
+$app->get('/cart/:idproduct/remove', function($idproduct){
+
+	$product = new Product($idproduct);
+
+	$cart = Cart::getFromSession();
+
+	$cart->removeProduct($product, true);
+
+	header("Location: /cart");
+	exit;
 })
-
 
 ?>
