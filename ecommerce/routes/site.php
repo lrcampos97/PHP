@@ -232,7 +232,7 @@ $app->post('/register', function(){
 		}		
 	
 
-		if (User::checkLogin($_POST["email"])){
+		if (User::getLoginExists($_POST["email"])){
 
 			User::setErrorRegister("Este endereço de e-mail já está sendo utilizado.");
 
@@ -261,8 +261,78 @@ $app->post('/register', function(){
 
 	}
 	
+	$_SESSION["registerValues"] = ["name"=>"", "email"=>"", "phone"=>""];
+
 	header("Location: /checkout");
 	exit;
 });
+
+
+
+// ESQUECI MINHA SENHA
+$app->get('/forgot', function(){
+
+	$page = new Ecommerce\Page();
+
+	$page->setTpl("forgot");	
+
+});
+
+// POST ESQUECI MINHA SENHA 
+$app->post('/forgot', function(){
+
+	$user = User::getForgot($_POST["email"], false);	
+
+	header("Location: /forgot/sent");
+	exit;
+
+});
+
+// EMAIL ENVIADO
+$app->get('/forgot/sent', function(){
+
+	$page = new Ecommerce\Page();
+
+	$page->setTpl("forgot-sent");	
+
+});
+
+// RESETAR SENHAR
+$app->get('/forgot/reset', function(){
+
+
+	$user = User::validForgotDecrypt($_GET["code"]);
+
+	$page = new Ecommerce\Page();
+	
+	$page->setTpl("forgot-reset", array(
+		"name"=>$user["desperson"],
+		"code"=>$_GET["code"]
+	));	
+});
+
+
+$app->post("/forgot/reset", function(){
+
+	$forgot = User::validForgotDecrypt($_POST["code"]); // verificar novamente o código	
+
+	User::setForgotUsed($forgot["idrecovery"]); // setar na tabela a data que foi utilizado o código de recuperação
+
+	$user = new User($forgot["iduser"]);
+
+
+	$newPassword = password_hash($_POST["password"], PASSWORD_DEFAULT, [ //encriptografar senha
+
+		"cost"=>12 // quanto mais mais seguro, porém também requer mais processamento
+
+	]);
+
+	$user->setPassword($newPassword);
+
+	$page = new Ecommerce\Page();
+	
+	$page->setTpl("forgot-reset-success");		
+});
+
 
 ?>

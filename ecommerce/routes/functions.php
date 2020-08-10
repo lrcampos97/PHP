@@ -2,7 +2,11 @@
 
     use \Ecommerce\Model\User;
 
-    function formatPrice(float $vlPrice){
+    function formatPrice($vlPrice){
+
+        if (!$vlPrice > 0){
+            $vlPrice = 0;
+        }        
 
         return number_format($vlPrice, 2, ",", ".");
         

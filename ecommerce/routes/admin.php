@@ -63,7 +63,7 @@ $app->get('/forgot', function(){
 // POST ESQUECI MINHA SENHA 
 $app->post('/forgot', function(){
 
-	$user = User::getForgot($_POST["email"], false);	
+	$user = User::getForgot($_POST["email"]);	
 
 	header("Location: /admin/forgot/sent");
 	exit;

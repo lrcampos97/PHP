@@ -84,8 +84,8 @@ class User extends Model{
             
         }
 
-        $data = $results[0];
-               
+        $data = $results[0];        
+                   
         if (password_verify($password, $data["despassword"]) === true){
             $user = new User();
 
