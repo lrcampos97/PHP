@@ -14,6 +14,7 @@ class User extends Model{
     const SECRET_IV = "HcodePhp7_Secret_IV";
     const ERROR = "UserError";
     const ERROR_REGISTER = "UserErrorRegister";
+    const SUCCESS = "UserSuccess";
 
 
     // CRIAR O MÉTODO CONTRUCTOR AQUI
@@ -84,11 +85,10 @@ class User extends Model{
             
         }
 
-        $data = $results[0];        
-                   
+        $data = $results[0];    
+                                   
         if (password_verify($password, $data["despassword"]) === true){
-            $user = new User();
-
+            $user = new User();            
 
             $data["desperson"] = utf8_encode($data["desperson"]);
 
@@ -98,8 +98,7 @@ class User extends Model{
 
             return $user;
 
-        } else {
-            
+        } else {            
             throw new \Exception("Usuário inexistente ou senha inválida"); // COLOCAR A "\" NO EXCEPTION POIS NOS MEUS NAME SPACE NAO TENHO UM EXPECTION ESPECÍFICO
 
         }
@@ -279,7 +278,6 @@ class User extends Model{
     }
 
     public function update(){
-        //sp_usersupdate_save
 
         $sql = new Sql();
 
@@ -295,7 +293,9 @@ class User extends Model{
         ));
 
 
-        $this->setData($results[0]);        
+        $this->setData($results[0]);
+        
+        $_SESSION[User::SESSION] = $this->getValues(); // atualizar usuário da sessão
     }
 
     public function delete(){
@@ -388,6 +388,32 @@ class User extends Model{
         return (count($results) > 0);
 
     }
+
+
+
+	public static function getSuccess()
+	{
+
+		$msg = (isset($_SESSION[User::SUCCESS])) ? $_SESSION[User::SUCCESS] : "";
+
+		User::clearSuccess();
+
+		return $msg;
+
+	}
+
+	public static function setSuccess($msg){
+
+		$_SESSION[User::SUCCESS] = $msg;
+
+	}
+
+	public static function clearSuccess()
+	{
+
+		$_SESSION[User::SUCCESS] = NULL;
+
+    }       
     
 }
 
