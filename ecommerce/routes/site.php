@@ -525,6 +525,39 @@ $app->post('/profile', function(){
 });
 
 
+$app->get('/profile-orders', function(){
+	
+	User::verifyLogin(false);
+
+	$user = User::getFromSession();
+
+	$page = new Page();
+
+	$page->setTpl('profile-orders',[
+		"orders"=>$user->getorders()
+	]);
+});
+
+
+$app->get('/profile/orders/:idorder', function($idorder){
+	
+	User::verifyLogin(false);
+
+	$order = new Order($idorder);
+
+	$cart = new Cart($order->getidcart());
+
+	$page = new Page();
+
+	$page->setTpl('profile-orders-detail',[
+		"order"=>$order->getValues(),
+		"products"=>$cart->getProducts(),
+		"cart"=>$cart->getValues()
+	]);
+});
+
+
+// BOLETO
 $app->get('/boleto/:idorder', function($idorder){
 
 	User::verifyLogin(false);	
