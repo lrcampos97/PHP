@@ -68,7 +68,7 @@
     <!-- /.social-auth-links -->
 
     <a href="/admin/forgot">I forgot my password</a><br>
-    <a href="register.html" class="text-center">Register a new membership</a>
+    <!-- <a href="/admin/users/create" class="text-center">Register a new membership</a> -->
 
   </div>
   <!-- /.login-box-body -->

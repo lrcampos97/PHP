@@ -49,7 +49,7 @@ $app->get('/admin/logout', function(){
 
 
 // ESQUECI MINHA SENHA
-$app->get('/forgot', function(){
+$app->get('/admin/forgot', function(){
 
 	$page = new Ecommerce\PageAdmin([
 		"header"=> false,
@@ -61,7 +61,7 @@ $app->get('/forgot', function(){
 });
 
 // POST ESQUECI MINHA SENHA 
-$app->post('/forgot', function(){
+$app->post('/admin/forgot', function(){
 
 	$user = User::getForgot($_POST["email"]);	
 
