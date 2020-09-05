@@ -20,7 +20,7 @@
                     <ul>
                         <li><a href="#">Minha Conta</a></li>
                         <li><a href="#">Meus Pedidos</a></li>
-                        <li><a href="#">Lista de Desejos</a></li>
+                        <!-- <li><a href="#">Lista de Desejos</a></li> -->
                     </ul>                        
                 </div>
             </div>

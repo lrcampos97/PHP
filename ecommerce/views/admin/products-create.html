@@ -53,6 +53,10 @@
               <label for="desurl">URL</label>
               <input type="text" class="form-control" id="desurl" name="desurl">
             </div>
+            <div class="form-group">
+              <label for="desurl">Descrição Completa</label>
+              <input type="text" class="form-control" id="desdescricaoProduto" name="desdescricaoProduto">
+            </div>
           </div>
           <!-- /.box-body -->
           <div class="box-footer">

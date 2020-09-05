@@ -79,6 +79,7 @@ class Product extends Model {
         $sql->query("DELETE FROM tb_products WHERE idproduct = :idproduct",array(
             ":idproduct"=>$this->getidproduct()
         ));
+
        
     }   
 
@@ -87,7 +88,7 @@ class Product extends Model {
         $sql = new Sql();
 
 
-        $results = $sql->select("CALL sp_products_save(:idproduct, :desproduct, :vlprice, :vlwidth, :vlheight, :vllength, :vlweight, :desurl)", array(
+        $results = $sql->select("CALL sp_products_save(:idproduct, :desproduct, :vlprice, :vlwidth, :vlheight, :vllength, :vlweight, :desurl, :desdescricaoProduto)", array(
             ":idproduct"=> $this->getidproduct(), // ESTES MÉTODOS SÃO GERADOS DE FORMA AUTOMATICA PELA CLASSE MODEL
             ":desproduct"=> $this->getdesproduct(),
             ":vlprice"=> $this->getvlprice(),
@@ -95,7 +96,8 @@ class Product extends Model {
             ":vlheight"=> $this->getvlheight(),
             ":vllength"=> $this->getvllength(),
             ":vlweight"=> $this->getvlweight(),
-            ":desurl"=> $this->getdesurl()
+            ":desurl"=> $this->getdesurl(),
+            ":desdescricaoProduto"=>$this->getdesdescricaoProduto()
         ));    
         
         $this->setData($results[0]);       

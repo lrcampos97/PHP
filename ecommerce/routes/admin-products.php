@@ -4,6 +4,20 @@ use \Ecommerce\PageAdmin;
 use \Ecommerce\Model\User;	
 use \Ecommerce\Model\Product;	
 
+
+$app->get("/admin/products/:idproduct/delete", function($idproduct){
+
+	User::verifyLogin();
+
+	$product = new Product($idproduct);
+
+	$product->delete();
+
+	header('Location: /admin/products');
+	exit;
+
+});
+
 // LISTAR PRODUTOS
 $app->get("/admin/products", function(){
 
@@ -107,18 +121,7 @@ $app->post("/admin/products/:idproduct", function($idproduct){
 });
 
 
-$app->get("/admin/products/:idproduct/delete", function($idproduct){
 
-	User::verifyLogin();
-
-	$product = new Product($idproduct);
-
-	$product->delete();
-
-	header('Location: /admin/products');
-	exit;
-
-});
 
 
 ?>
